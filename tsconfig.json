@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",  // Folder tempat file .js hasil kompilasi
+    "baseUrl": ".",      // Base path untuk import relatif
+    "paths": {
+      "*": ["node_modules/*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts"  // Semua file TypeScript di dalam src
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

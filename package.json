@@ -1,9 +1,12 @@
 {
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "^22.14.0",
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "axios": "^1.11.0",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.1",
     "ioredis": "^5.7.0",
     "mqtt": "^5.14.0",

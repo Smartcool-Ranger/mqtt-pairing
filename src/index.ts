@@ -1,10 +1,14 @@
-import { initializeMqttClient } from './oldMqttClient';
+import { initializeMqttClient as initializeOldClient } from './oldMqttClient';
 import { handlePairingRequest } from './oldPairingProcessor';
+import { initializeNewMqttClient } from './newMqttClient';
+import { handleRegistrationRequest } from './newRegisterProcessor';
 
-console.log("Memulai MQTT Pairing Service (v2: Redis + DB) - Modular");
+console.log("Memulai Multi-Service MQTT...");
 
-// Inisialisasi MQTT client dan berikan fungsi processor sebagai message handler.
-// Ini akan menghubungkan logika dari kedua file baru.
-initializeMqttClient(handlePairingRequest);
+// // Menjalankan Layanan Pairing Lama
+initializeOldClient(handlePairingRequest);
+console.log("Layanan Pairing Lama sedang berjalan...");
 
-console.log("Layanan pairing sedang berjalan dan mendengarkan pesan MQTT...");
+// Menjalankan Layanan Registrasi Baru
+initializeNewMqttClient(handleRegistrationRequest);
+console.log("Layanan Registrasi Baru sedang berjalan...");

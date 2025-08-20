@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const mqttConfig = {
+export const oldMqttConfig = {
     brokerUrl: process.env.OLD_MQTT_BROKER || 'mqtt://localhost:1883',
     username: process.env.OLD_MQTT_USER,
     password: process.env.OLD_MQTT_PASSWORD,

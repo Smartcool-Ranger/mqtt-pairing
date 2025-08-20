@@ -32,22 +32,22 @@ export async function getDeviceNameFromRedis(chipId: string): Promise<string | n
     try {
         const data = await redisClient.get(key);
         if (!data) {
-            console.log(`[Redis] MISS: Key ${key} tidak ditemukan.`);
+            // console.log(`[Redis] MISS: Key ${key} tidak ditemukan.`);
             return null;
         }
 
-        console.log(`[Redis] HIT: Key ${key} ditemukan.`);
+        // console.log(`[Redis] HIT: Key ${key} ditemukan.`);
         const parsedData: RedisDeviceData = JSON.parse(data);
 
         // Validasi data dan ambil identity.name
         if (parsedData && parsedData.identity && parsedData.identity.name) {
             return parsedData.identity.name;
         } else {
-            console.warn(`[Redis] Data untuk key ${key} tidak valid atau tidak memiliki identity.name.`);
+            // console.warn(`[Redis] Data untuk key ${key} tidak valid atau tidak memiliki identity.name.`);
             return null;
         }
     } catch (error) {
-        console.error(`[Redis] Gagal mengambil atau parse data untuk key ${key}:`, error);
+        // console.error(`[Redis] Gagal mengambil atau parse data untuk key ${key}:`, error);
         return null;
     }
 }

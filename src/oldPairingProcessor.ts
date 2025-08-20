@@ -1,7 +1,7 @@
 import { MqttClient } from 'mqtt';
 import { findDeviceNameByChipId, MqttPayload } from './database';
 import { getDeviceNameFromRedis } from './redis';
-import { mqttConfig } from '../config/oldMqttConfig';
+import { oldMqttConfig } from '../config/oldMqttConfig';
 
 /**
  * Mem-publish pesan konfirmasi ke device setelah pairing berhasil.
@@ -10,7 +10,7 @@ import { mqttConfig } from '../config/oldMqttConfig';
  * @param client Instance MQTT client untuk melakukan publish.
  */
 function publishConfirmation(chipId: string, deviceId: string, client: MqttClient): void {
-    const topic = mqttConfig.publishTopicPattern.replace('{chipId}', chipId);
+    const topic = oldMqttConfig.publishTopicPattern.replace('{chipId}', chipId);
     const payload = {
         chipid: chipId,
         devicecommand: "NEWDEVICEID",
@@ -21,10 +21,10 @@ function publishConfirmation(chipId: string, deviceId: string, client: MqttClien
 
     client.publish(topic, payloadString, { qos: 1 }, (err) => {
         if (err) {
-            console.error(`Gagal publish konfirmasi ke ${topic}:`, err);
+            // console.error(`Gagal publish konfirmasi ke ${topic}:`, err);
         } else {
-            console.log(`Berhasil publish konfirmasi ke ${topic}`);
-            console.log(`Payload: ${payloadString}`);
+            // console.log(`Berhasil publish konfirmasi ke ${topic}`);
+            // console.log(`Payload: ${payloadString}`);
         }
     });
 }
@@ -36,18 +36,18 @@ function publishConfirmation(chipId: string, deviceId: string, client: MqttClien
  * @param client Instance MQTT client.
  */
 export async function handlePairingRequest(topic: string, payload: Buffer, client: MqttClient): Promise<void> {
-    if (topic !== mqttConfig.subscribeTopic) return;
+    if (topic !== oldMqttConfig.subscribeTopic) return;
 
     try {
-        console.log(`\n--- Pesan diterima ---`);
-        console.log(`Topic: ${topic}`);
+        // console.log(`\n--- Pesan diterima ---`);
+        // console.log(`Topic: ${topic}`);
         const payloadString = payload.toString();
-        console.log(`Payload: ${payloadString}`);
+        // console.log(`Payload: ${payloadString}`);
 
         const mqttPayload: MqttPayload = JSON.parse(payloadString);
 
         if (!mqttPayload.chipid) {
-            console.warn("Payload tidak valid (tidak ada chipid), pesan diabaikan.");
+            // console.warn("Payload tidak valid (tidak ada chipid), pesan diabaikan.");
             return;
         }
 
@@ -64,13 +64,13 @@ export async function handlePairingRequest(topic: string, payload: Buffer, clien
 
         // 3. Proses hasilnya
         if (deviceName) {
-            console.log(`Pairing berhasil untuk Chip ID ${chipId} -> Device Name: ${deviceName}`);
+            // console.log(`Pairing berhasil untuk Chip ID ${chipId} -> Device Name: ${deviceName}`);
             publishConfirmation(chipId, deviceName, client);
         } else {
-            console.error(`GAGAL PAIRING: Device untuk Chip ID ${chipId} tidak ditemukan di Redis maupun Database.`);
+            // console.error(`GAGAL PAIRING: Device untuk Chip ID ${chipId} tidak ditemukan di Redis maupun Database.`);
         }
 
     } catch (error: any) {
-        console.error(`Gagal memproses pesan dari topic ${topic}:`, error.message);
+        // console.error(`Gagal memproses pesan dari topic ${topic}:`, error.message);
     }
 }

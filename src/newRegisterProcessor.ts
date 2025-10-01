@@ -47,7 +47,7 @@ async function getIpFromLaravelApi(chipId: string, hardware: string): Promise<st
 
 function formatSuccessResponse(command: string, data: any) {
     return {
-        id: Date.now(),
+        id: Date.now() % 0xFFFFFFFF,
         type: 'set',
         command: command,
         key: 0,

@@ -8,6 +8,26 @@ import {
     RegistrationPayload
 } from './database';
 
+let idCounter = 1;
+
+function generate32BitId(): number {
+  // Gunakan 23 bit dari timestamp
+  const timeBits = (Date.now() & 0x7FFFFF);
+  
+  // Gunakan 8 bit untuk counter
+  const counterBits = (idCounter++ & 0xFF);
+  
+  // Kombinasikan untuk hasil 31-bit yang unik dan aman
+  const id = (timeBits << 8) | counterBits;
+  
+  // Reset counter jika melebihi batas
+  if (idCounter > 255) {
+    idCounter = 1;
+  }
+  
+  return id;
+}
+
 async function getIpFromLaravelApi(chipId: string, hardware: string): Promise<string | null> {
     if (!apiConfig.laravelIpApiUrl) {
         // console.warn("URL API Laravel tidak di-set di .env. IP tidak akan diambil.");
@@ -47,7 +67,7 @@ async function getIpFromLaravelApi(chipId: string, hardware: string): Promise<st
 
 function formatSuccessResponse(command: string, data: any) {
     return {
-        id: Date.now() % 0xFFFFFFFF,
+        id: generate32BitId(),
         type: 'set',
         command: command,
         key: 0,
